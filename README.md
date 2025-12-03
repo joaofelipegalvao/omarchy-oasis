@@ -12,7 +12,7 @@
 </p>
 
 ## Preview
-![preview.png](https://i.postimg.cc/13Qf5x7D/preview.png)
+![preview.png](https://i.postimg.cc/XvW7vWsZ/preview.png)
 ![oasis-abyss.png](https://i.postimg.cc/gJFZRwN7/oasis-abyss.png)
 
 ## Installation
