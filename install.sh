@@ -17,41 +17,55 @@ list_themes() {
 
 install_config() {
     local src="$1"
-    local category="$2"
-    local filename=$(basename "$src")
+    local basename=$(basename "$src")
 
-    case "$category" in
-        hypr)
+    case "$basename" in
+        hyprland.conf)
             cp "$src" "$CONFIG_HOME/hyprland.conf" 2>/dev/null || true
             ;;
-        waybar)
+        waybar.css)
             cp "$src" "$CONFIG_HOME/waybar.css" 2>/dev/null || true
             ;;
-        alacritty)
+        alacritty.toml)
             cp "$src" "$CONFIG_HOME/alacritty.toml" 2>/dev/null || true
             ;;
-        terminal)
-            case "$filename" in
-                ghostty.conf)   cp "$src" "$CONFIG_HOME/ghostty.conf" 2>/dev/null || true ;;
-                kitty.conf)     cp "$src" "$CONFIG_HOME/kitty.conf" 2>/dev/null || true ;;
-                mako.ini)       cp "$src" "$CONFIG_HOME/mako.ini" 2>/dev/null || true ;;
-            esac
+        ghostty.conf)
+            cp "$src" "$CONFIG_HOME/ghostty.conf" 2>/dev/null || true
             ;;
-        editor)
-            case "$filename" in
-                neovim.lua)     cp "$src" "$CONFIG_HOME/nvim/lua/user/colorscheme.lua" 2>/dev/null || mkdir -p "$CONFIG_HOME/nvim/lua/user" && cp "$src" "$CONFIG_HOME/nvim/lua/user/colorscheme.lua" 2>/dev/null || true ;;
-            esac
+        kitty.conf)
+            cp "$src" "$CONFIG_HOME/kitty.conf" 2>/dev/null || true
             ;;
-        other)
-            case "$filename" in
-                hyprlock.conf)  cp "$src" "$CONFIG_HOME/hyprlock.conf" 2>/dev/null || true ;;
-                btop.theme)     cp "$src" "$CONFIG_HOME/btop/themes/" 2>/dev/null || true ;;
-                chromium.theme) cp "$src" "$CONFIG_HOME/chromium/" 2>/dev/null || true ;;
-                icons.theme)    cp "$src" "$CONFIG_HOME/icons/" 2>/dev/null || true ;;
-                swayosd.css)    cp "$src" "$CONFIG_HOME/swayosd.css" 2>/dev/null || true ;;
-                walker.css)     cp "$src" "$CONFIG_HOME/walker.css" 2>/dev/null || true ;;
-                vscode.json)    cp "$src" "$CONFIG_HOME/Code - OSS/User/snippets/" 2>/dev/null || mkdir -p "$CONFIG_HOME/Code - OSS/User/snippets" && cp "$src" "$CONFIG_HOME/Code - OSS/User/snippets/" 2>/dev/null || true ;;
-            esac
+        mako.ini)
+            cp "$src" "$CONFIG_HOME/mako.ini" 2>/dev/null || true
+            ;;
+        neovim.lua)
+            mkdir -p "$CONFIG_HOME/nvim/lua/user"
+            cp "$src" "$CONFIG_HOME/nvim/lua/user/colorscheme.lua" 2>/dev/null || true
+            ;;
+        hyprlock.conf)
+            cp "$src" "$CONFIG_HOME/hyprlock.conf" 2>/dev/null || true
+            ;;
+        btop.theme)
+            mkdir -p "$CONFIG_HOME/btop/themes"
+            cp "$src" "$CONFIG_HOME/btop/themes/" 2>/dev/null || true
+            ;;
+        chromium.theme)
+            mkdir -p "$CONFIG_HOME/chromium"
+            cp "$src" "$CONFIG_HOME/chromium/" 2>/dev/null || true
+            ;;
+        icons.theme)
+            mkdir -p "$CONFIG_HOME/icons"
+            cp "$src" "$CONFIG_HOME/icons/" 2>/dev/null || true
+            ;;
+        swayosd.css)
+            cp "$src" "$CONFIG_HOME/swayosd.css" 2>/dev/null || true
+            ;;
+        walker.css)
+            cp "$src" "$CONFIG_HOME/walker.css" 2>/dev/null || true
+            ;;
+        vscode.json)
+            mkdir -p "$CONFIG_HOME/Code - OSS/User/snippets"
+            cp "$src" "$CONFIG_HOME/Code - OSS/User/snippets/" 2>/dev/null || true
             ;;
     esac
 }
@@ -69,28 +83,25 @@ install_theme() {
     echo -e "${GREEN}Installing theme: oasis-$theme${NC}"
 
     mkdir -p "$target_dir"
+    mkdir -p "$target_dir/backgrounds"
 
-    cp "$theme_path/theme.conf" "$target_dir/"
-    echo -e "  ${GREEN}✓${NC} theme.conf"
+    for item in "$theme_path"/*; do
+        local basename=$(basename "$item")
 
-    for dir in hypr waybar alacritty terminal editor other wallpapers; do
-        if [ -d "$theme_path/$dir" ]; then
-            mkdir -p "$target_dir/$dir"
-            cp -r "$theme_path/$dir"/* "$target_dir/$dir/" 2>/dev/null || true
-            echo -e "  ${GREEN}✓${NC} $dir"
-
-            for file in "$theme_path/$dir"/*; do
-                if [ -f "$file" ]; then
-                    install_config "$file" "$dir"
+        case "$basename" in
+            backgrounds)
+                cp -r "$item"/* "$target_dir/backgrounds/" 2>/dev/null || true
+                echo -e "  ${GREEN}✓${NC} backgrounds"
+                ;;
+            *)
+                if [ -f "$item" ]; then
+                    cp "$item" "$target_dir/"
+                    echo -e "  ${GREEN}✓${NC} $basename"
+                    install_config "$item"
                 fi
-            done
-        fi
+                ;;
+        esac
     done
-
-    if [ -f "$theme_path/preview.png" ]; then
-        cp "$theme_path/preview.png" "$target_dir/"
-        echo -e "  ${GREEN}✓${NC} preview.png"
-    fi
 
     echo ""
     echo -e "${GREEN}Theme 'oasis-$theme' installed!${NC}"

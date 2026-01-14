@@ -28,51 +28,38 @@ uninstall_theme() {
 
     local removed=0
 
-    for dir in hypr waybar alacritty terminal editor other wallpapers; do
-        if [ -d "$target_dir/$dir" ]; then
-            for file in "$target_dir/$dir"/*; do
-                if [ -f "$file" ]; then
-                    local basename=$(basename "$file")
-                    local dest_file=""
+    for file in "$target_dir"/*; do
+        if [ -f "$file" ]; then
+            local basename=$(basename "$file")
+            local dest_file=""
 
-                    case "$dir" in
-                        hypr)       dest_file="$CONFIG_HOME/hyprland.conf" ;;
-                        waybar)     dest_file="$CONFIG_HOME/waybar.css" ;;
-                        alacritty)  dest_file="$CONFIG_HOME/alacritty.toml" ;;
-                        terminal)
-                            case "$basename" in
-                                ghostty.conf)   dest_file="$CONFIG_HOME/ghostty.conf" ;;
-                                kitty.conf)     dest_file="$CONFIG_HOME/kitty.conf" ;;
-                                mako.ini)       dest_file="$CONFIG_HOME/mako.ini" ;;
-                            esac
-                            ;;
-                        editor)
-                            case "$basename" in
-                                neovim.lua)     dest_file="$CONFIG_HOME/nvim/lua/user/colorscheme.lua" ;;
-                            esac
-                            ;;
-                        other)
-                            case "$basename" in
-                                hyprlock.conf)  dest_file="$CONFIG_HOME/hyprlock.conf" ;;
-                                btop.theme)     dest_file="$CONFIG_HOME/btop/themes/$(basename "$file")" ;;
-                                chromium.theme) dest_file="$CONFIG_HOME/chromium/$(basename "$file")" ;;
-                                icons.theme)    dest_file="$CONFIG_HOME/icons/$(basename "$file")" ;;
-                                swayosd.css)    dest_file="$CONFIG_HOME/swayosd.css" ;;
-                                walker.css)     dest_file="$CONFIG_HOME/walker.css" ;;
-                                vscode.json)    dest_file="$CONFIG_HOME/Code - OSS/User/snippets/$(basename "$file")" ;;
-                            esac
-                            ;;
-                    esac
+            case "$basename" in
+                hyprland.conf)      dest_file="$CONFIG_HOME/hyprland.conf" ;;
+                waybar.css)         dest_file="$CONFIG_HOME/waybar.css" ;;
+                alacritty.toml)     dest_file="$CONFIG_HOME/alacritty.toml" ;;
+                ghostty.conf)       dest_file="$CONFIG_HOME/ghostty.conf" ;;
+                kitty.conf)         dest_file="$CONFIG_HOME/kitty.conf" ;;
+                mako.ini)           dest_file="$CONFIG_HOME/mako.ini" ;;
+                neovim.lua)         dest_file="$CONFIG_HOME/nvim/lua/user/colorscheme.lua" ;;
+                hyprlock.conf)      dest_file="$CONFIG_HOME/hyprlock.conf" ;;
+                btop.theme)         dest_file="$CONFIG_HOME/btop/themes/btop.theme" ;;
+                chromium.theme)     dest_file="$CONFIG_HOME/chromium/chromium.theme" ;;
+                icons.theme)        dest_file="$CONFIG_HOME/icons/icons.theme" ;;
+                swayosd.css)        dest_file="$CONFIG_HOME/swayosd.css" ;;
+                walker.css)         dest_file="$CONFIG_HOME/walker.css" ;;
+                vscode.json)        dest_file="$CONFIG_HOME/Code - OSS/User/snippets/vscode.json" ;;
+            esac
 
-                    if [ -n "$dest_file" ] && [ -f "$dest_file" ]; then
-                        mkdir -p "$(dirname "$dest_file")"
-                        cp "$dest_file" "$BACKUP_DIR/" 2>/dev/null || true
-                        rm -f "$dest_file"
-                        echo -e "  ${GREEN}✓${NC} $basename (backed up)"
-                        removed=$((removed + 1))
-                    fi
-                fi
-            done
+            if [ -n "$dest_file" ] && [ -f "$dest_file" ]; then
+                mkdir -p "$(dirname "$dest_file")"
+                cp "$dest_file" "$BACKUP_DIR/" 2>/dev/null || true
+                rm -f "$dest_file"
+                echo -e "  ${GREEN}✓${NC} $basename (backed up)"
+                removed=$((removed + 1))
+            fi
+        elif [ -d "$file" ] && [ "$(basename "$file")" = "backgrounds" ]; then
+            rm -rf "$file"
+            echo -e "  ${GREEN}✓${NC} backgrounds"
         fi
     done
 
