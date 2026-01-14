@@ -3,7 +3,8 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 THEMES_DIR="$SCRIPT_DIR/themes"
-OMARCHY_THEMES="$HOME/.local/share/omarchy/themes"
+CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+OMARCHY_THEMES="$CONFIG_HOME/omarchy/themes"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -14,65 +15,43 @@ list_themes() {
     ls -d "$THEMES_DIR"/*/ 2>/dev/null | xargs -I {} basename {} | sort
 }
 
-generate_colors_toml() {
-    local theme="$1"
-    local theme_path="$THEMES_DIR/$theme"
-    local colors_file="$OMARCHY_THEMES/oasis-$theme/colors.toml"
+install_config() {
+    local src="$1"
+    local category="$2"
+    local filename=$(basename "$src")
 
-    case "$theme" in
-        abyss)
-            cat > "$colors_file" << 'EOF'
-accent = "#ff6b6b"
-cursor = "#cba6f7"
-foreground = "#cdd6f4"
-background = "#1e1e2e"
-selection_foreground = "#1e1e2e"
-selection_background = "#ff6b6b"
-
-color0 = "#45475a"
-color1 = "#ff6b6b"
-color2 = "#a6e3a1"
-color3 = "#f9e2af"
-color4 = "#89b4fa"
-color5 = "#f5c2e7"
-color6 = "#94e2d5"
-color7 = "#bac2de"
-color8 = "#585b70"
-color9 = "#ff6b6b"
-color10 = "#a6e3a1"
-color11 = "#f9e2af"
-color12 = "#89b4fa"
-color13 = "#f5c2e7"
-color14 = "#94e2d5"
-color15 = "#a6adc8"
-EOF
+    case "$category" in
+        hypr)
+            cp "$src" "$CONFIG_HOME/hyprland.conf" 2>/dev/null || true
             ;;
-        starlight)
-            cat > "$colors_file" << 'EOF'
-accent = "#519bff"
-cursor = "#1e1e2e"
-foreground = "#1e1e2e"
-background = "#f5f5f5"
-selection_foreground = "#f5f5f5"
-selection_background = "#519bff"
-
-color0 = "#585b70"
-color1 = "#ff6b6b"
-color2 = "#a6e3a1"
-color3 = "#f9e2af"
-color4 = "#519bff"
-color5 = "#f5c2e7"
-color6 = "#94e2d5"
-color7 = "#45475a"
-color8 = "#6c7086"
-color9 = "#ff6b6b"
-color10 = "#a6e3a1"
-color11 = "#f9e2af"
-color12 = "#519bff"
-color13 = "#f5c2e7"
-color14 = "#94e2d5"
-color15 = "#cdd6f4"
-EOF
+        waybar)
+            cp "$src" "$CONFIG_HOME/waybar.css" 2>/dev/null || true
+            ;;
+        alacritty)
+            cp "$src" "$CONFIG_HOME/alacritty.toml" 2>/dev/null || true
+            ;;
+        terminal)
+            case "$filename" in
+                ghostty.conf)   cp "$src" "$CONFIG_HOME/ghostty.conf" 2>/dev/null || true ;;
+                kitty.conf)     cp "$src" "$CONFIG_HOME/kitty.conf" 2>/dev/null || true ;;
+                mako.ini)       cp "$src" "$CONFIG_HOME/mako.ini" 2>/dev/null || true ;;
+            esac
+            ;;
+        editor)
+            case "$filename" in
+                neovim.lua)     cp "$src" "$CONFIG_HOME/nvim/lua/user/colorscheme.lua" 2>/dev/null || mkdir -p "$CONFIG_HOME/nvim/lua/user" && cp "$src" "$CONFIG_HOME/nvim/lua/user/colorscheme.lua" 2>/dev/null || true ;;
+            esac
+            ;;
+        other)
+            case "$filename" in
+                hyprlock.conf)  cp "$src" "$CONFIG_HOME/hyprlock.conf" 2>/dev/null || true ;;
+                btop.theme)     cp "$src" "$CONFIG_HOME/btop/themes/" 2>/dev/null || true ;;
+                chromium.theme) cp "$src" "$CONFIG_HOME/chromium/" 2>/dev/null || true ;;
+                icons.theme)    cp "$src" "$CONFIG_HOME/icons/" 2>/dev/null || true ;;
+                swayosd.css)    cp "$src" "$CONFIG_HOME/swayosd.css" 2>/dev/null || true ;;
+                walker.css)     cp "$src" "$CONFIG_HOME/walker.css" 2>/dev/null || true ;;
+                vscode.json)    cp "$src" "$CONFIG_HOME/Code - OSS/User/snippets/" 2>/dev/null || mkdir -p "$CONFIG_HOME/Code - OSS/User/snippets" && cp "$src" "$CONFIG_HOME/Code - OSS/User/snippets/" 2>/dev/null || true ;;
+            esac
             ;;
     esac
 }
@@ -90,38 +69,37 @@ install_theme() {
     echo -e "${GREEN}Installing theme: oasis-$theme${NC}"
 
     mkdir -p "$target_dir"
-    mkdir -p "$target_dir/backgrounds"
 
-    generate_colors_toml "$theme"
+    cp "$theme_path/theme.conf" "$target_dir/"
+    echo -e "  ${GREEN}✓${NC} theme.conf"
 
-    for item in "$theme_path"/*; do
-        local basename=$(basename "$item")
+    for dir in hypr waybar alacritty terminal editor other wallpapers; do
+        if [ -d "$theme_path/$dir" ]; then
+            mkdir -p "$target_dir/$dir"
+            cp -r "$theme_path/$dir"/* "$target_dir/$dir/" 2>/dev/null || true
+            echo -e "  ${GREEN}✓${NC} $dir"
 
-        case "$basename" in
-            colors.toml|README.md|preview.png|hyprland.conf|hyprlock.conf)
-                continue
-                ;;
-            backgrounds)
-                cp -r "$item"/* "$target_dir/backgrounds/" 2>/dev/null || true
-                echo -e "  ${GREEN}✓${NC} backgrounds"
-                ;;
-            *)
-                if [ -f "$item" ]; then
-                    cp "$item" "$target_dir/"
-                    echo -e "  ${GREEN}✓${NC} $basename"
+            for file in "$theme_path/$dir"/*; do
+                if [ -f "$file" ]; then
+                    install_config "$file" "$dir"
                 fi
-                ;;
-        esac
+            done
+        fi
     done
 
     if [ -f "$theme_path/preview.png" ]; then
         cp "$theme_path/preview.png" "$target_dir/"
+        echo -e "  ${GREEN}✓${NC} preview.png"
     fi
 
     echo ""
-    echo -e "${GREEN}Theme 'oasis-$theme' installed to $OMARCHY_THEMES/oasis-$theme${NC}"
+    echo -e "${GREEN}Theme 'oasis-$theme' installed!${NC}"
+    echo -e "${YELLOW}Files copied to:${NC}"
+    echo "  - $target_dir"
     echo ""
-    echo -e "${YELLOW}To activate the theme, run:${NC}"
+    echo -e "${YELLOW}Configs also applied to ~/.config/${NC}"
+    echo ""
+    echo -e "${YELLOW}To set as active theme:${NC}"
     echo -e "  ${GREEN}omarchy-theme-set oasis-$theme${NC}"
 }
 
@@ -197,7 +175,7 @@ show_usage() {
         echo "  - $theme"
     done
     echo ""
-    echo "Themes are installed to ~/.local/share/omarchy/themes/"
+    echo "Themes are installed to ~/.config/omarchy/themes/"
     echo "Use 'omarchy-theme-set oasis-<theme>' to activate."
 }
 
