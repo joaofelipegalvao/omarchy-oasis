@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-THEMES_DIR="$SCRIPT_DIR/themes"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+THEMES_DIR="$(dirname "$SCRIPT_DIR")/themes"
 CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 RED='\033[0;31m'

@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-THEMES_DIR="$SCRIPT_DIR/themes"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+THEMES_DIR="$(dirname "$SCRIPT_DIR")/themes"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -92,6 +92,7 @@ show_usage() {
 
 main() {
     local show_short=false
+    local target_theme=""
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
@@ -104,7 +105,8 @@ main() {
                 shift
                 ;;
             *)
-                break
+                target_theme="$1"
+                shift
                 ;;
         esac
     done
@@ -117,31 +119,11 @@ main() {
         exit 1
     fi
 
-    if [ $# -eq 0 ]; then
-        echo -e "${YELLOW}╔══════════════════════════════════════════╗${NC}"
-        echo -e "${YELLOW}║     Omarchy Oasis - Available Themes     ║${NC}"
-        echo -e "${YELLOW}╚══════════════════════════════════════════╝${NC}"
-        echo ""
-        echo -e "Found ${GREEN}$total${NC} theme(s):"
-        echo ""
-
-        if [ "$show_short" = true ]; then
-            for theme in "${themes[@]}"; do
-                echo "  - $theme"
-            done
+    if [ -n "$target_theme" ]; then
+        if [ -d "$THEMES_DIR/$target_theme" ]; then
+            show_theme_info "$target_theme"
         else
-            for theme in "${themes[@]}"; do
-                show_theme_info "$theme"
-            done
-        fi
-
-        echo -e "${YELLOW}Install with:${NC} ./install.sh [theme_name]"
-    else
-        local theme="$1"
-        if [ -d "$THEMES_DIR/$theme" ]; then
-            show_theme_info "$theme"
-        else
-            echo -e "${RED}Theme '$theme' not found${NC}"
+            echo -e "${RED}Theme '$target_theme' not found${NC}"
             echo ""
             echo "Available themes:"
             for t in "${themes[@]}"; do
@@ -149,6 +131,23 @@ main() {
             done
             exit 1
         fi
+    elif [ "$show_short" = true ]; then
+        for theme in "${themes[@]}"; do
+            echo "$theme"
+        done
+    else
+        echo -e "${YELLOW}╔══════════════════════════════════════════╗${NC}"
+        echo -e "${YELLOW}║     Omarchy Oasis - Available Themes     ║${NC}"
+        echo -e "${YELLOW}╚══════════════════════════════════════════╝${NC}"
+        echo ""
+        echo -e "Found ${GREEN}$total${NC} theme(s):"
+        echo ""
+
+        for theme in "${themes[@]}"; do
+            show_theme_info "$theme"
+        done
+
+        echo -e "${YELLOW}Install with:${NC} ./install.sh [theme_name]"
     fi
 }
 
