@@ -1,5 +1,5 @@
 #!/bin/bash
-# Desinstala temas Omarchy Oasis
+# Uninstall Omarchy Oasis Themes
 
 INSTALL_DIR="$HOME/.config/omarchy/themes"
 
@@ -9,9 +9,9 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Função para listar temas instalados
+# Function to list installed themes
 list_installed() {
-    echo -e "${BLUE}Temas Oasis instalados:${NC}"
+    echo -e "${BLUE}Installed Oasis themes:${NC}"
     local i=1
     for theme_path in "$INSTALL_DIR"/oasis-*; do
         if [ -d "$theme_path" ]; then
@@ -20,71 +20,71 @@ list_installed() {
             ((i++))
         fi
     done
-    
+
     if [ $i -eq 1 ]; then
-        echo -e "  ${YELLOW}Nenhum tema Oasis instalado${NC}"
+        echo -e "  ${YELLOW}No Oasis themes installed${NC}"
         return 1
     fi
     return 0
 }
 
-# Função para desinstalar tema
+# Function to uninstall theme
 uninstall_theme() {
     local theme=$1
     local theme_path="$INSTALL_DIR/$theme"
-    
+
     if [ ! -d "$theme_path" ]; then
-        echo -e "${RED}Erro: Tema '$theme' não está instalado${NC}"
+        echo -e "${RED}Error: Theme '$theme' is not installed${NC}"
         return 1
     fi
-    
-    echo -e "${YELLOW}Desinstalando: $theme${NC}"
+
+    echo -e "${YELLOW}Uninstalling: $theme${NC}"
     rm -rf "$theme_path"
-    echo -e "${GREEN}✓ Tema removido com sucesso${NC}"
+    echo -e "${GREEN}✓ Theme removed successfully${NC}"
 }
 
-# Função para desinstalar todos
+# Function to uninstall all themes
 uninstall_all() {
-    echo -e "${YELLOW}Desinstalando todos os temas Oasis...${NC}\n"
-    
+    echo -e "${YELLOW}Uninstalling all Oasis themes...${NC}\n"
+
     for theme_path in "$INSTALL_DIR"/oasis-*; do
         if [ -d "$theme_path" ]; then
             theme_name=$(basename "$theme_path")
             uninstall_theme "$theme_name"
         fi
     done
-    
-    echo -e "\n${GREEN}✓ Todos os temas foram removidos!${NC}"
+
+    echo -e "\n${GREEN}✓ All themes have been removed!${NC}"
 }
 
-# Menu interativo
+# Interactive menu
 show_menu() {
     echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║  Desinstalar Omarchy Oasis Themes     ║${NC}"
+    echo -e "${BLUE}║   Uninstall Omarchy Oasis Themes      ║${NC}"
     echo -e "${BLUE}╚════════════════════════════════════════╝${NC}\n"
-    
+
     if ! list_installed; then
         exit 0
     fi
-    
-    echo -e "\n${YELLOW}Opções:${NC}"
-    echo -e "  ${GREEN}a)${NC} Desinstalar todos os temas"
-    echo -e "  ${GREEN}q)${NC} Sair"
+
+    echo -e "\n${YELLOW}Options:${NC}"
+    echo -e "  ${GREEN}a)${NC} Uninstall all themes"
+    echo -e "  ${GREEN}q)${NC} Quit"
     echo ""
-    
-    read -p "Escolha um tema (número), 'a' para todos, ou 'q' para sair: " choice
-    
+
+    read -p "Choose a theme (number), 'a' for all, or 'q' to quit: " choice
+
     case $choice in
-        q|Q)
-            echo -e "${BLUE}Saindo...${NC}"
+        q | Q)
+            echo -e "${BLUE}Exiting...${NC}"
             exit 0
             ;;
-        a|A)
-            read -p "Tem certeza que deseja remover TODOS os temas? (s/N): " confirm
-            if [[ $confirm == [sS] ]]; then
+        a | A)
+            read -p "Are you sure you want to remove ALL themes? (y/N): " confirm
+            if [[ $confirm == [yY] ]]; then
                 uninstall_all
             else
-                echo -e "${YELLOW}Operação cancelada${NC}"
+                echo -e "${YELLOW}Operation cancelled${NC}"
             fi
             ;;
         [0-9]*)
@@ -94,22 +94,22 @@ show_menu() {
                     themes+=("$(basename "$theme_path")")
                 fi
             done
-            
+
             local idx=$((choice - 1))
             if [ $idx -ge 0 ] && [ $idx -lt ${#themes[@]} ]; then
-                read -p "Desinstalar '${themes[$idx]}'? (s/N): " confirm
-                if [[ $confirm == [sS] ]]; then
+                read -p "Uninstall '${themes[$idx]}'? (y/N): " confirm
+                if [[ $confirm == [yY] ]]; then
                     uninstall_theme "${themes[$idx]}"
                 else
-                    echo -e "${YELLOW}Operação cancelada${NC}"
+                    echo -e "${YELLOW}Operation cancelled${NC}"
                 fi
             else
-                echo -e "${RED}Opção inválida!${NC}"
+                echo -e "${RED}Invalid option!${NC}"
                 exit 1
             fi
             ;;
         *)
-            echo -e "${RED}Opção inválida!${NC}"
+            echo -e "${RED}Invalid option!${NC}"
             exit 1
             ;;
     esac
@@ -119,9 +119,9 @@ show_menu() {
 main() {
     if [ $# -eq 1 ]; then
         theme=$1
-        # Adicionar prefixo "oasis-" se não tiver
+        # Add "oasis-" prefix if not present
         [[ $theme != oasis-* ]] && theme="oasis-$theme"
-        
+
         uninstall_theme "$theme"
     else
         show_menu

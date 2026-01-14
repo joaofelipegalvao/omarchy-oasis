@@ -1,6 +1,5 @@
 <p align="center">
   <img
-<<<<<<< Updated upstream
     src="./assets/logo.png"
     width="auto" height="128" alt="logo" />
 </p>
@@ -18,73 +17,49 @@ _More themes coming soon as I port them from the original collection._
 
 ## 📦 Installation
 
-Since each theme variation lives in its own git branch, install them manually:
-
-### Abyss
-=======
-    src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3dd.svg"
-    width="128" height="128" alt="Oasis emoji" />
-</p>
-<h1 align="center">Omarchy Oasis</h1>
-<p align="center">
-  A collection of themes for <a href="https://omarchy.org">Omarchy</a> based on the <a href="https://github.com/uhs-robert/oasis.nvim">oasis.nvim</a> colorscheme by <a href="https://github.com/uhs-robert">uhs-robert</a>.
-</p>
-
-## Themes
-
-| Theme | Description |
-|-------|-------------|
-| [abyss](themes/abyss/) | Deep dark theme with warm accents |
-| [starlight](themes/starlight/) | Light theme with soft colors |
-
-## Quick Install
->>>>>>> Stashed changes
+### Method 1: Interactive Installer (Recommended)
 
 ```bash
+# Clone the repository
 git clone https://github.com/joaofelipegalvao/omarchy-oasis.git
 cd omarchy-oasis
 
-# Interactive installer
+# Make the installer executable
+chmod +x install.sh
+
+# Run the installer
 ./install.sh
-
-# Or install specific theme
-./install.sh abyss
 ```
 
-## Features
+The installer will present an interactive menu where you can:
 
-- Multiple themes in one repository
-- Interactive installer with preview
-- Backup on uninstall
-- Supports all Omarchy-compatible configs
+- Choose specific themes to install
 
-## Scripts
+- Install all themes at once
 
-| Script | Description |
-|--------|-------------|
-| `./install.sh` | Install themes (interactive or specific) |
-| `./scripts/list-themes.sh` | List available themes |
-| `./scripts/uninstall.sh` | Uninstall themes with backup |
+- View which themes are available
 
-## For Developers
+### Method 2: Install a Specific Theme
 
-```
-omarchy-oasis/
-├── install.sh              # Main installer
-├── themes/
-│   ├── abyss/              # Theme files
-│   └── starlight/
-└── scripts/
-    ├── list-themes.sh
-    └── uninstall.sh
-```
-
-### Starlight
-
-<<<<<<< Updated upstream
 ```bash
-git clone -b starlight https://github.com/joaofelipegalvao/omarchy-oasis.git ~/.config/omarchy/themes/oasis-starlight
-omarchy-theme-set oasis-starlight
+# Install only the Abyss theme
+./install.sh abyss
+
+# Install only the Starlight theme
+./install.sh starlight
+```
+
+### Method 3: Manual Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/joaofelipegalvao/omarchy-oasis.git
+
+# Copy the desired theme
+cp -r omarchy-oasis/themes/abyss ~/.config/omarchy/themes/oasis-abyss
+
+# Apply the theme
+omarchy-theme-set oasis-abyss
 ```
 
 ## 🔄 Switching Themes
@@ -168,7 +143,3 @@ This repository uses git branches to organize theme variations:
 
 - Thanks to [dhh](https://github.com/DHH) for Omarchy
 - Thanks to [uhs-robert](https://github.com/uhs-robert) for the original colorscheme [oasis](https://github.com/uhs-robert/oasis.nvim)
-=======
-- [@dhh](https://github.com/dhh) for [Omarchy](https://omarchy.org)
-- [@uhs-robert](https://github.com/uhs-robert) for [oasis.nvim](https://github.com/uhs-robert/oasis.nvim)
->>>>>>> Stashed changes

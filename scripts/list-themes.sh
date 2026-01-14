@@ -1,5 +1,5 @@
 #!/bin/bash
-# Lista temas Omarchy Oasis instalados e disponíveis
+# List installed and available Omarchy Oasis themes
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 THEMES_DIR="$REPO_DIR/themes"
@@ -14,24 +14,24 @@ echo -e "${BLUE}╔════════════════════�
 echo -e "${BLUE}║   Omarchy Oasis Themes - Status       ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════╝${NC}\n"
 
-echo -e "${YELLOW}Temas disponíveis no repositório:${NC}"
+echo -e "${YELLOW}Available themes in repository:${NC}"
 for theme_path in "$THEMES_DIR"/*; do
     if [ -d "$theme_path" ]; then
         theme_name=$(basename "$theme_path")
         installed=""
-        
-        # Verificar se está instalado
+
+        # Check if installed
         if [ -d "$INSTALL_DIR/oasis-$theme_name" ]; then
-            installed="${GREEN}[INSTALADO]${NC}"
+            installed="${GREEN}[INSTALLED]${NC}"
         else
-            installed="${YELLOW}[NÃO INSTALADO]${NC}"
+            installed="${YELLOW}[NOT INSTALLED]${NC}"
         fi
-        
+
         echo -e "  • oasis-$theme_name $installed"
     fi
 done
 
-echo -e "\n${YELLOW}Temas atualmente instalados:${NC}"
+echo -e "\n${YELLOW}Currently installed themes:${NC}"
 if [ -d "$INSTALL_DIR" ]; then
     count=0
     for theme_path in "$INSTALL_DIR"/oasis-*; do
@@ -41,14 +41,14 @@ if [ -d "$INSTALL_DIR" ]; then
             ((count++))
         fi
     done
-    
+
     if [ $count -eq 0 ]; then
-        echo -e "  ${YELLOW}Nenhum tema Oasis instalado${NC}"
+        echo -e "  ${YELLOW}No Oasis themes installed${NC}"
     fi
 else
-    echo -e "  ${YELLOW}Nenhum tema instalado${NC}"
+    echo -e "  ${YELLOW}No themes installed${NC}"
 fi
 
-echo -e "\n${BLUE}Para instalar temas, execute:${NC}"
-echo -e "  ${GREEN}./install.sh${NC} (modo interativo)"
-echo -e "  ${GREEN}./install.sh <nome-do-tema>${NC} (instalar tema específico)"
+echo -e "\n${BLUE}To install themes, run:${NC}"
+echo -e "  ${GREEN}./install.sh${NC} (interactive mode)"
+echo -e "  ${GREEN}./install.sh <theme-name>${NC} (install specific theme)"
