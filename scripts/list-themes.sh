@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-THEMES_DIR="$(dirname "$SCRIPT_DIR")/themes"
+THEMES_DIR="$SCRIPT_DIR/themes"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
