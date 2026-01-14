@@ -1,5 +1,6 @@
 <p align="center">
   <img
+<<<<<<< Updated upstream
     src="./assets/logo.png"
     width="auto" height="128" alt="logo" />
 </p>
@@ -20,14 +21,67 @@ _More themes coming soon as I port them from the original collection._
 Since each theme variation lives in its own git branch, install them manually:
 
 ### Abyss
+=======
+    src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3dd.svg"
+    width="128" height="128" alt="Oasis emoji" />
+</p>
+<h1 align="center">Omarchy Oasis</h1>
+<p align="center">
+  A collection of themes for <a href="https://omarchy.org">Omarchy</a> based on the <a href="https://github.com/uhs-robert/oasis.nvim">oasis.nvim</a> colorscheme by <a href="https://github.com/uhs-robert">uhs-robert</a>.
+</p>
+
+## Themes
+
+| Theme | Description |
+|-------|-------------|
+| [abyss](themes/abyss/) | Deep dark theme with warm accents |
+| [starlight](themes/starlight/) | Light theme with soft colors |
+
+## Quick Install
+>>>>>>> Stashed changes
 
 ```bash
-git clone -b abyss https://github.com/joaofelipegalvao/omarchy-oasis.git ~/.config/omarchy/themes/oasis-abyss
-omarchy-theme-set oasis-abyss
+git clone https://github.com/joaofelipegalvao/omarchy-oasis.git
+cd omarchy-oasis
+
+# Interactive installer
+./install.sh
+
+# Or install specific theme
+./install.sh abyss
+```
+
+## Features
+
+- Multiple themes in one repository
+- Interactive installer with preview
+- Backup on uninstall
+- Supports all Omarchy-compatible configs
+
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `./install.sh` | Install themes (interactive or specific) |
+| `./scripts/list-themes.sh` | List available themes |
+| `./scripts/uninstall.sh` | Uninstall themes with backup |
+
+## For Developers
+
+```
+omarchy-oasis/
+├── install.sh              # Main installer
+├── themes/
+│   ├── abyss/              # Theme files
+│   └── starlight/
+└── scripts/
+    ├── list-themes.sh
+    └── uninstall.sh
 ```
 
 ### Starlight
 
+<<<<<<< Updated upstream
 ```bash
 git clone -b starlight https://github.com/joaofelipegalvao/omarchy-oasis.git ~/.config/omarchy/themes/oasis-starlight
 omarchy-theme-set oasis-starlight
@@ -114,3 +168,7 @@ This repository uses git branches to organize theme variations:
 
 - Thanks to [dhh](https://github.com/DHH) for Omarchy
 - Thanks to [uhs-robert](https://github.com/uhs-robert) for the original colorscheme [oasis](https://github.com/uhs-robert/oasis.nvim)
+=======
+- [@dhh](https://github.com/dhh) for [Omarchy](https://omarchy.org)
+- [@uhs-robert](https://github.com/uhs-robert) for [oasis.nvim](https://github.com/uhs-robert/oasis.nvim)
+>>>>>>> Stashed changes
