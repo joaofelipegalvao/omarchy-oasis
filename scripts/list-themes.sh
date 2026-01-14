@@ -1,154 +1,54 @@
 #!/bin/bash
-set -e
+# Lista temas Omarchy Oasis instalados e disponíveis
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-THEMES_DIR="$(dirname "$SCRIPT_DIR")/themes"
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+THEMES_DIR="$REPO_DIR/themes"
+INSTALL_DIR="$HOME/.config/omarchy/themes"
 
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
+BLUE='\033[0;34m'
 NC='\033[0m'
 
-list_themes() {
-    ls -d "$THEMES_DIR"/*/ 2>/dev/null | xargs -I {} basename {} | sort
-}
+echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║   Omarchy Oasis Themes - Status       ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════╝${NC}\n"
 
-show_theme_info() {
-    local theme="$1"
-    local theme_path="$THEMES_DIR/$theme"
-    local readme="$theme_path/README.md"
-    local preview="$theme_path/preview.png"
-
-    echo -e "${CYAN}╔══════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║ $theme${NC}"
-    local padding=$((40 - ${#theme}))
-    for ((i=0; i<padding; i++)); do echo -n " "; done
-    echo -e "║${NC}"
-    echo -e "${CYAN}╚══════════════════════════════════════════╝${NC}"
-    echo ""
-
-    if [ -f "$readme" ]; then
-        echo -e "${YELLOW}Description:${NC}"
-        grep -v "^#" "$readme" | head -10 | sed 's/^/  /'
-        echo ""
-    fi
-
-    echo -e "${YELLOW}Configs included:${NC}"
-    for item in "$theme_path"/*; do
-        if [ -f "$item" ]; then
-            local basename=$(basename "$item")
-            local ext="${basename##*.}"
-            local name="${basename%.*}"
-
-            case "$basename" in
-                preview.png|README.md)
-                    continue
-                    ;;
-                *.theme)
-                    echo -e "  ${GREEN}✓${NC} $name (GTK/GTK3)"
-                    ;;
-                *)
-                    case "$ext" in
-                        conf|toml|ini|css|lua|json)
-                            echo -e "  ${GREEN}✓${NC} $basename"
-                            ;;
-                    esac
-                    ;;
-            esac
-        elif [ -d "$item" ]; then
-            local dirname=$(basename "$item")
-            case "$dirname" in
-                backgrounds)
-                    echo -e "  ${GREEN}✓${NC} wallpapers"
-                    ;;
-                *)
-                    echo -e "  ${GREEN}✓${NC} $dirname"
-                    ;;
-            esac
-        fi
-    done
-
-    if [ -f "$preview" ]; then
-        echo ""
-        echo -e "${YELLOW}Preview:${NC} $preview"
-    fi
-    echo ""
-}
-
-show_usage() {
-    echo "Usage: $0 [options]"
-    echo ""
-    echo "Options:"
-    echo "  -h, --help       Show this help message"
-    echo "  -s, --short      Show only theme names"
-    echo "  <theme_name>     Show detailed info for specific theme"
-    echo ""
-    echo "Examples:"
-    echo "  $0                # List all themes with details"
-    echo "  $0 --short        # List only theme names"
-    echo "  $0 abyss          # Show info for 'abyss' theme"
-}
-
-main() {
-    local show_short=false
-    local target_theme=""
-
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            -h|--help)
-                show_usage
-                exit 0
-                ;;
-            -s|--short)
-                show_short=true
-                shift
-                ;;
-            *)
-                target_theme="$1"
-                shift
-                ;;
-        esac
-    done
-
-    local themes=($(list_themes))
-    local total=${#themes[@]}
-
-    if [ $total -eq 0 ]; then
-        echo -e "${RED}No themes found in $THEMES_DIR${NC}"
-        exit 1
-    fi
-
-    if [ -n "$target_theme" ]; then
-        if [ -d "$THEMES_DIR/$target_theme" ]; then
-            show_theme_info "$target_theme"
+echo -e "${YELLOW}Temas disponíveis no repositório:${NC}"
+for theme_path in "$THEMES_DIR"/*; do
+    if [ -d "$theme_path" ]; then
+        theme_name=$(basename "$theme_path")
+        installed=""
+        
+        # Verificar se está instalado
+        if [ -d "$INSTALL_DIR/oasis-$theme_name" ]; then
+            installed="${GREEN}[INSTALADO]${NC}"
         else
-            echo -e "${RED}Theme '$target_theme' not found${NC}"
-            echo ""
-            echo "Available themes:"
-            for t in "${themes[@]}"; do
-                echo "  - $t"
-            done
-            exit 1
+            installed="${YELLOW}[NÃO INSTALADO]${NC}"
         fi
-    elif [ "$show_short" = true ]; then
-        for theme in "${themes[@]}"; do
-            echo "$theme"
-        done
-    else
-        echo -e "${YELLOW}╔══════════════════════════════════════════╗${NC}"
-        echo -e "${YELLOW}║     Omarchy Oasis - Available Themes     ║${NC}"
-        echo -e "${YELLOW}╚══════════════════════════════════════════╝${NC}"
-        echo ""
-        echo -e "Found ${GREEN}$total${NC} theme(s):"
-        echo ""
-
-        for theme in "${themes[@]}"; do
-            show_theme_info "$theme"
-        done
-
-        echo -e "${YELLOW}Install with:${NC} ./install.sh [theme_name]"
+        
+        echo -e "  • oasis-$theme_name $installed"
     fi
-}
+done
 
-main "$@"
+echo -e "\n${YELLOW}Temas atualmente instalados:${NC}"
+if [ -d "$INSTALL_DIR" ]; then
+    count=0
+    for theme_path in "$INSTALL_DIR"/oasis-*; do
+        if [ -d "$theme_path" ]; then
+            theme_name=$(basename "$theme_path")
+            echo -e "  ${GREEN}✓${NC} $theme_name"
+            ((count++))
+        fi
+    done
+    
+    if [ $count -eq 0 ]; then
+        echo -e "  ${YELLOW}Nenhum tema Oasis instalado${NC}"
+    fi
+else
+    echo -e "  ${YELLOW}Nenhum tema instalado${NC}"
+fi
+
+echo -e "\n${BLUE}Para instalar temas, execute:${NC}"
+echo -e "  ${GREEN}./install.sh${NC} (modo interativo)"
+echo -e "  ${GREEN}./install.sh <nome-do-tema>${NC} (instalar tema específico)"
