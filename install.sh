@@ -3,7 +3,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 THEMES_DIR="$SCRIPT_DIR/themes"
-CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+OMARCHY_THEMES="$HOME/.local/share/omarchy/themes"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -14,62 +14,115 @@ list_themes() {
     ls -d "$THEMES_DIR"/*/ 2>/dev/null | xargs -I {} basename {} | sort
 }
 
-show_preview() {
+generate_colors_toml() {
     local theme="$1"
-    local preview_path="$THEMES_DIR/$theme/preview.png"
-    if [ -f "$preview_path" ]; then
-        echo -e "${YELLOW}Preview: $preview_path${NC}"
-    fi
+    local theme_path="$THEMES_DIR/$theme"
+    local colors_file="$OMARCHY_THEMES/oasis-$theme/colors.toml"
+
+    case "$theme" in
+        abyss)
+            cat > "$colors_file" << 'EOF'
+accent = "#ff6b6b"
+cursor = "#cba6f7"
+foreground = "#cdd6f4"
+background = "#1e1e2e"
+selection_foreground = "#1e1e2e"
+selection_background = "#ff6b6b"
+
+color0 = "#45475a"
+color1 = "#ff6b6b"
+color2 = "#a6e3a1"
+color3 = "#f9e2af"
+color4 = "#89b4fa"
+color5 = "#f5c2e7"
+color6 = "#94e2d5"
+color7 = "#bac2de"
+color8 = "#585b70"
+color9 = "#ff6b6b"
+color10 = "#a6e3a1"
+color11 = "#f9e2af"
+color12 = "#89b4fa"
+color13 = "#f5c2e7"
+color14 = "#94e2d5"
+color15 = "#a6adc8"
+EOF
+            ;;
+        starlight)
+            cat > "$colors_file" << 'EOF'
+accent = "#519bff"
+cursor = "#1e1e2e"
+foreground = "#1e1e2e"
+background = "#f5f5f5"
+selection_foreground = "#f5f5f5"
+selection_background = "#519bff"
+
+color0 = "#585b70"
+color1 = "#ff6b6b"
+color2 = "#a6e3a1"
+color3 = "#f9e2af"
+color4 = "#519bff"
+color5 = "#f5c2e7"
+color6 = "#94e2d5"
+color7 = "#45475a"
+color8 = "#6c7086"
+color9 = "#ff6b6b"
+color10 = "#a6e3a1"
+color11 = "#f9e2af"
+color12 = "#519bff"
+color13 = "#f5c2e7"
+color14 = "#94e2d5"
+color15 = "#cdd6f4"
+EOF
+            ;;
+    esac
 }
 
 install_theme() {
     local theme="$1"
     local theme_path="$THEMES_DIR/$theme"
+    local target_dir="$OMARCHY_THEMES/oasis-$theme"
 
     if [ ! -d "$theme_path" ]; then
         echo -e "${RED}Error: Theme '$theme' not found${NC}"
         return 1
     fi
 
-    echo -e "${GREEN}Installing theme: $theme${NC}"
+    echo -e "${GREEN}Installing theme: oasis-$theme${NC}"
+
+    mkdir -p "$target_dir"
+    mkdir -p "$target_dir/backgrounds"
+
+    generate_colors_toml "$theme"
 
     for item in "$theme_path"/*; do
-        if [ -d "$item" ]; then
-            local dirname=$(basename "$item")
-            local target_dir="$CONFIG_HOME/$dirname"
-            mkdir -p "$target_dir"
-            cp -r "$item"/* "$target_dir/" 2>/dev/null || true
-            echo -e "  ${GREEN}✓${NC} $dirname"
-        elif [ -f "$item" ]; then
-            local basename=$(basename "$item")
-            local ext="${basename##*.}"
-            local name="${basename%.*}"
+        local basename=$(basename "$item")
 
-            case "$ext" in
-                theme)
-                    mkdir -p "$CONFIG_HOME/$name"
-                    cp "$item" "$CONFIG_HOME/$name/theme" 2>/dev/null || true
-                    echo -e "  ${GREEN}✓${NC} $name.theme"
-                    ;;
-                conf|toml|ini|css|lua|json)
-                    if [ -f "$CONFIG_HOME/$basename" ] || [ -f "$CONFIG_HOME/${name}.$ext" ]; then
-                        cp "$item" "$CONFIG_HOME/" 2>/dev/null || true
-                        echo -e "  ${GREEN}✓${NC} $basename"
-                    fi
-                    ;;
-            esac
-        fi
+        case "$basename" in
+            colors.toml|README.md|preview.png|hyprland.conf|hyprlock.conf)
+                continue
+                ;;
+            backgrounds)
+                cp -r "$item"/* "$target_dir/backgrounds/" 2>/dev/null || true
+                echo -e "  ${GREEN}✓${NC} backgrounds"
+                ;;
+            *)
+                if [ -f "$item" ]; then
+                    cp "$item" "$target_dir/"
+                    echo -e "  ${GREEN}✓${NC} $basename"
+                fi
+                ;;
+        esac
     done
 
-    local backgrounds_src="$theme_path/backgrounds"
-    if [ -d "$backgrounds_src" ]; then
-        mkdir -p "$CONFIG_HOME/backgrounds"
-        cp -r "$backgrounds_src"/* "$CONFIG_HOME/backgrounds/" 2>/dev/null || true
-        echo -e "  ${GREEN}✓${NC} backgrounds"
+    if [ -f "$theme_path/preview.png" ]; then
+        cp "$theme_path/preview.png" "$target_dir/"
     fi
 
-    echo -e "${GREEN}Theme '$theme' installed successfully!${NC}"
-    echo -e "${YELLOW}Note: Some configs may require manual merging or restart of applications.${NC}"
+    echo ""
+    echo -e "${GREEN}Theme 'oasis-$theme' installed to $OMARCHY_THEMES/oasis-$theme${NC}"
+    echo ""
+    echo -e "${YELLOW}To activate the theme, run:${NC}"
+    echo -e "  ${GREEN}omarchy-theme-set oasis-$theme${NC}"
 }
 
 interactive_install() {
@@ -92,7 +145,6 @@ interactive_install() {
         local idx=$((i + 1))
         local theme="${themes[$i]}"
         local readme="$THEMES_DIR/$theme/README.md"
-        local preview="$THEMES_DIR/$theme/preview.png"
 
         echo -e "  ${GREEN}$idx)${NC} $theme"
         if [ -f "$readme" ]; then
@@ -144,6 +196,9 @@ show_usage() {
     for theme in $(list_themes); do
         echo "  - $theme"
     done
+    echo ""
+    echo "Themes are installed to ~/.local/share/omarchy/themes/"
+    echo "Use 'omarchy-theme-set oasis-<theme>' to activate."
 }
 
 main() {
