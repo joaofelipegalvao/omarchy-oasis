@@ -93,6 +93,15 @@ install_theme() {
                 cp -r "$item"/* "$target_dir/backgrounds/" 2>/dev/null || true
                 echo -e "  ${GREEN}✓${NC} backgrounds"
                 ;;
+            *.png)
+                if [ "$basename" != "preview.png" ]; then
+                    cp "$item" "$target_dir/backgrounds/"
+                    echo -e "  ${GREEN}✓${NC} background"
+                else
+                    cp "$item" "$target_dir/"
+                    echo -e "  ${GREEN}✓${NC} $basename"
+                fi
+                ;;
             *)
                 if [ -f "$item" ]; then
                     cp "$item" "$target_dir/"
