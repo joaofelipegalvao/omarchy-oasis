@@ -4,9 +4,9 @@
     width="auto" height="128" alt="logo" />
 </p>
 
-# Omarchy Oasis Themes
+# Omarchy Oasis
 
-A collection of desert-inspired Omarchy themes ported from [oasis](https://github.com/uhs-robert/oasis.nvim). Each theme variation is maintained in its own branch for easy installation and management.
+Desert-inspired themes for Omarchy, ported from [oasis](https://github.com/uhs-robert/oasis.nvim).
 
 ## 🎨 Available Themes
 
