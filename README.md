@@ -79,7 +79,7 @@ Click any card below to view the full preview and screenshots. [↓ Or click her
 
 <table>
   <tr>
-    <td align="center"><a href="#abyss-dark"><img src="./assets/screenshots/abyss-preview.png" alt="Abyss (dark)" width="auto"></a><br><strong>Abyss</strong><br><em>Black</em></td>
+    <td align="center"><a href="#abyss-dark"><img src="./assets/screenshots/abyss-dark-preview.png" alt="Abyss (dark)" width="auto"></a><br><strong>Abyss</strong><br><em>Black</em></td>
     <td align="center"><a href="#starlight-dark"><img src="./assets/screenshots/starlight-preview.png" alt="Starlight (dark)" width="auto"></a><br><strong>Starlight</strong><br><em>Black Vivid</em></td>
   </tr>
 </table>
@@ -118,8 +118,8 @@ This repository uses git branches to organize theme variations:
     <a id="abyss-dark"></a>
     <h3>Abyss (Dark · Black)</h3>
     <p>Pure black background with vivid desert-inspired colors. Perfect for OLED displays and late-night coding sessions.</p>
-    <img src="./assets/screenshots/abyss-preview.png"</img>
-    <img src="./assets/screenshots/oasis-abyss.png"></img>
+    <img src="./assets/screenshots/abyss-dark-preview.png"</img>
+    <img src="./assets/screenshots/abyss-dark.png"></img>
     <p align="center">
       <a href="#dark-previews">↑ Back to Dark Themes</a>
     </p>
