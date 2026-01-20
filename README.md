@@ -19,6 +19,7 @@
 - **starlight-dark** - Dark · Black Vivid
 - **starlight-light** - Light
 - **lagoon-dark** - Dark · Default
+- lagoon-light - Light
 
 _More themes coming soon as I port them from the original collection._
 
@@ -50,6 +51,7 @@ The interactive installer lets you:
 ./install.sh starlight-dark
 ./install.sh starlight-light
 ./install.sh lagoon-dark
+./install.sh lagoon-light
 ```
 
 ### Manual Installation
@@ -77,6 +79,7 @@ omarchy-theme-set oasis-abyss-light
 omarchy-theme-set oasis-starlight-dark
 omarchy-theme-set oasis-starlight-light
 omarchy-theme-set oasis-lagoon-dark
+omarchy-theme-set oasis-lagoon-light
 ```
 
 ### List Installed Themes
@@ -147,6 +150,14 @@ Click any card below to view the full preview and screenshots. [↓ Or click her
       <strong>Starlight Light</strong>
       <br>
     </td>
+            <td align="center">
+      <a href="#lagoon-light">
+        <img src="./assets/screenshots/lagoon-light-preview.png" alt="Lagoon Light" width="400">
+      </a>
+      <br>
+      <strong>Lagoon Light</strong>
+      <br>
+    </td>
   </tr>
 </table>
 
@@ -208,6 +219,15 @@ Click any card below to view the full preview and screenshots. [↓ Or click her
     <img src="./assets/screenshots/starlight-light-preview.png"></img>
     <p><strong>Background Wallpaper</strong></p>
     <img src="./assets/screenshots/oasis-starlight-light.png"></img>
+    <p align="center">
+      <a href="#light-previews">↑ Back to Light Themes</a>
+    </p>
+        <a id="Lagoon-light"></a>
+    <h3>Lagoon (Light)</h3>
+    <p><strong>Terminal Preview</strong></p>
+    <img src="./assets/screenshots/lagoon-light-preview.png"></img>
+    <p><strong>Background Wallpaper</strong></p>
+    <img src="./assets/screenshots/oasis-lagoon-light.png"></img>
     <p align="center">
       <a href="#light-previews">↑ Back to Light Themes</a>
     </p>
