@@ -18,6 +18,7 @@
 - **abyss-light** - Light
 - **starlight-dark** - Dark · Black Vivid
 - **starlight-light** - Light
+- **lagoon-dark** - Dark · Default
 
 _More themes coming soon as I port them from the original collection._
 
@@ -47,6 +48,8 @@ The interactive installer lets you:
 ./install.sh abyss-dark
 ./install.sh abyss-light
 ./install.sh starlight-dark
+./install.sh starlight-light
+./install.sh lagoon-dark
 ```
 
 ### Manual Installation
@@ -73,6 +76,7 @@ omarchy-theme-set oasis-abyss-dark
 omarchy-theme-set oasis-abyss-light
 omarchy-theme-set oasis-starlight-dark
 omarchy-theme-set oasis-starlight-light
+omarchy-theme-set oasis-lagoon-dark
 ```
 
 ### List Installed Themes
