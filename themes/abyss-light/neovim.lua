@@ -3,12 +3,19 @@ return {
 		"uhs-robert/oasis.nvim",
 		lazy = false,
 		priority = 1000,
+		config = function()
+			require("oasis").setup({
+				style = "abyss",
+				light_intensity = 1,
+			})
+			vim.o.background = "light"
+			vim.cmd.colorscheme("oasis")
+		end,
 	},
-
 	{
 		"LazyVim/LazyVim",
 		opts = {
-			colorscheme = "oasis-abyss",
+			colorscheme = "oasis",
 		},
 	},
 }
