@@ -19,7 +19,7 @@
 - **starlight-dark** - Dark · Black Vivid
 - **starlight-light** - Light
 - **lagoon-dark** - Dark · Default
-- lagoon-light - Light
+- **lagoon-light** - Light
 
 _More themes coming soon as I port them from the original collection._
 
