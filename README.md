@@ -112,6 +112,14 @@ Click any card below to view the full preview and screenshots. [↓ Or click her
       <strong>Starlight Dark</strong>
       <br>
     </td>
+        <td align="center">
+      <a href="#lagoon-dark">
+        <img src="./assets/screenshots/lagoon-dark-preview.png" alt="Lagoon Dark" width="400">
+      </a>
+      <br>
+      <strong>Lagoon Dark</strong>
+      <br>
+    </td>
   </tr>
 </table>
 
@@ -165,6 +173,15 @@ Click any card below to view the full preview and screenshots. [↓ Or click her
     <img src="./assets/screenshots/starlight-dark-preview.png"></img>
     <p><strong>Background Wallpaper</strong></p>
     <img src="./assets/screenshots/oasis-starlight-dark.png"></img>
+    <p align="center">
+      <a href="#dark-previews">↑ Back to Dark Themes</a>
+    </p>
+        <a id="starlight-dark"></a>
+    <h3>Lagoon (Dark · Default)</h3>
+    <p><strong>Terminal Preview</strong></p>
+    <img src="./assets/screenshots/lagoon-dark-preview.png"></img>
+    <p><strong>Background Wallpaper</strong></p>
+    <img src="./assets/screenshots/oasis-lagoon-dark.png"></img>
     <p align="center">
       <a href="#dark-previews">↑ Back to Dark Themes</a>
     </p>
